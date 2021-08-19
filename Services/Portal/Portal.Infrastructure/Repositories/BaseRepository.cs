@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace Portal.Infrastructure.Repositories
 {
@@ -19,6 +20,7 @@ namespace Portal.Infrastructure.Repositories
         T GetById(int id);
 
         void Create(T entity);
+        Task CreateAsync(T entity);
 
         void Update(T entity);
 
@@ -38,6 +40,8 @@ namespace Portal.Infrastructure.Repositories
         }
 
         public void Create(T entity) => DbSet.Add(entity);
+
+        public async Task CreateAsync(T entity)=> await DbSet.AddAsync(entity);
 
         public void Delete(T entity) => DbSet.Remove(entity);
 

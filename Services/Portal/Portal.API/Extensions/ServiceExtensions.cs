@@ -1,14 +1,15 @@
-﻿using AspNetCoreRateLimit;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+using Portal.Domain.Core.Auth;
 using Portal.Infrastructure;
+using Portal.Infrastructure.EF;
 using Portal.Infrastructure.Repositories;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using System.Collections.Generic;
+using System;
 using System.Linq;
 using System.Reflection;
 
@@ -99,6 +100,46 @@ namespace Portal.API.Extensions
             //services.AddHttpContextAccessor();
             ////NOTE: Add app.UseIpRateLimiting();
         }
+
+        public static void ConfigureIdentity(this IServiceCollection services)
+        {
+            //var builder = services.AddIdentityCore<User>(o =>
+            //{
+            //    o.Password.RequireDigit = true;
+            //    o.Password.RequireLowercase = false;
+            //    o.Password.RequireUppercase = false;
+            //    o.Password.RequireNonAlphanumeric = false;
+            //    o.Password.RequiredLength = 10;
+            //    o.User.RequireUniqueEmail = true;
+            //});
+            //builder = new IdentityBuilder(builder.UserType, typeof(IdentityRole), builder.Services);
+            //builder.AddEntityFrameworkStores<BookDbContext>()
+            //.AddDefaultTokenProviders();
+
+            services.AddDefaultIdentity<User>()
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<BookDbContext>();
+            services.Configure<IdentityOptions>(options =>
+            {
+                // Password settings.
+                options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireNonAlphanumeric = true;
+                options.Password.RequireUppercase = true;
+                options.Password.RequiredLength = 6;
+                options.Password.RequiredUniqueChars = 1;
+
+                // Lockout settings.
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Lockout.AllowedForNewUsers = true;
+
+                // User settings.
+                options.User.AllowedUserNameCharacters =
+                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+                options.User.RequireUniqueEmail = false;
+            });
+        }
     }
 
     public class ConfigureSwaggerOptions
@@ -145,5 +186,4 @@ namespace Portal.API.Extensions
             return info;
         }
     }
-
 }

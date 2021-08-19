@@ -5,29 +5,36 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Portal.API.Controllers.v1 {
-
+namespace Portal.API.Controllers.v1
+{
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiVersion("1.0")]
-    public class LogsController : BaseApiController {
+    public class LogsController : BaseApiController
+    {
         private readonly ILogRepository _logRepository;
 
-        public LogsController(ILogRepository logRepository) {
+        public LogsController(ILogRepository logRepository)
+        {
             _logRepository = logRepository;
         }
 
         [HttpGet]
-        public IActionResult GetAll() {
+        public IActionResult GetAll()
+        {
             return SuccessResult(_logRepository.GetAll());
         }
 
         [HttpGet("{days}")]
-        public IActionResult GetAll([FromRoute] int days) {
+        public IActionResult GetAll([FromRoute] int days)
+        {
             var logs = new List<Log>();
 
-            if (days == 0) {
+            if (days == 0)
+            {
                 logs = _logRepository.GetAll();
-            } else {
+            }
+            else
+            {
                 logs = _logRepository.GetAll();
                 var timeNow = DateTime.Now;
                 timeNow = timeNow.AddDays(-Math.Abs(days));

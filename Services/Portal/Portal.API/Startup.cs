@@ -29,6 +29,7 @@ namespace Portal.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<BookDbContext>(options => options.UseSqlServer(ConnectionString));
+            services.ConfigureIdentity();
             services.ConfigureRepositoryManager();
             services.ConfigureBusinessServices();
             services.ConfigureApiVersion();
