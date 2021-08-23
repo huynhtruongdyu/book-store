@@ -1,4 +1,5 @@
 ﻿using Mapster;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Portal.Domain.Models;
@@ -12,6 +13,7 @@ namespace Portal.API.Controllers.v1
 {
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiVersion("1.0")]
+    [AllowAnonymous]
     public class TestController: BaseApiController
     {
         private readonly IService _service;

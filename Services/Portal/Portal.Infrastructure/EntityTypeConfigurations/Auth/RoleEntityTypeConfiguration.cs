@@ -11,16 +11,26 @@ namespace Portal.Infrastructure.EntityTypeConfigurations.Auth
         {
 
             builder.HasData(
-                 new IdentityRole
-                 {
-                     Name = "Manager",
-                     NormalizedName = "MANAGER"
-                 },
-                 new IdentityRole
-                 {
-                     Name = "Administrator",
-                     NormalizedName = "ADMINISTRATOR"
-                 }
+                new IdentityRole
+                {
+                    Name = "Administrator",
+                    NormalizedName = "ADMINISTRATOR"
+                }, 
+                new IdentityRole
+                {
+                    Name = "Manager",
+                    NormalizedName = "MANAGER"
+                }, 
+                new IdentityRole
+                {
+                    Name = "Staff",
+                    NormalizedName = "STAFF"
+                },
+                new IdentityRole
+                {
+                    Name = "User",
+                    NormalizedName = "USER"
+                }
            );
         }
     }

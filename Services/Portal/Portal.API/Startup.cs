@@ -34,6 +34,7 @@ namespace Portal.API
             services.ConfigureBusinessServices();
             services.ConfigureApiVersion();
             services.ConfigureRateLimiting();
+            services.ConfigureJWT(Configuration);
 
             services.AddControllers();
             //services.AddSwaggerGen(c =>
@@ -75,6 +76,8 @@ namespace Portal.API
             {
                 endpoints.MapControllers();
             });
+
+            BookDbContextSeed.SeedAsync(app);
         }
     }
 }

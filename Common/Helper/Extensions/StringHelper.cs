@@ -10,7 +10,7 @@ namespace Helper.Extensions
     {
         public static List<int> ToListInt(this string str)
         {
-            return new List<int>();
+            return str.Split(',').Select(int.Parse).ToList();
         }
     }
 }

@@ -1,10 +1,12 @@
 ﻿using Mapster;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Portal.Domain.Core.Auth;
 using Portal.Domain.Models;
 using Portal.Infrastructure;
+using Portal.Infrastructure.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,14 +21,17 @@ namespace Portal.API.Controllers.v1
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<AuthenticationController> _logger;
         private readonly UserManager<User> _userManager;
+        private readonly IAuthenticationService _authenticationService;
         public AuthenticationController(
             IUnitOfWork unitOfWork,
             ILogger<AuthenticationController> logger,
-            UserManager<User> userManager)
+            UserManager<User> userManager,
+            IAuthenticationService authenticationService)
         {
             _unitOfWork = unitOfWork;
             _logger = logger;
             _userManager = userManager;
+            _authenticationService = authenticationService;
         }
 
         [HttpPost]
@@ -45,6 +50,19 @@ namespace Portal.API.Controllers.v1
             await _userManager.AddToRolesAsync(user, userCreateReqModel.Roles);
             //return SuccessResult("created");
             return StatusCode(201);
+        }
+
+        [HttpPost("login")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Authenticate([FromBody] UserLoginModel user)
+        {
+            if (!await _authenticationService.ValidateUser(user))
+            {
+                _logger.LogWarning($"{nameof(Authenticate)}: Authentication failed. Wrong user name or password.");
+                return ErrorResult("wrong.user.name.or.password");
+            }
+            var response = new { Token = await _authenticationService.CreateToken() };
+            return SuccessResult(response);
         }
     }
 }

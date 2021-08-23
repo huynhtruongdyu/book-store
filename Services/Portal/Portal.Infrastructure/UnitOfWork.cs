@@ -16,45 +16,51 @@ namespace Portal.Infrastructure
     public class UnitOfWork : IUnitOfWork
     {
         private BookDbContext Context;
-        private IBookRepository _bookRepository;
-        private IAuthorRepository _authorRepository;
-        private ILogRepository _logRepository;
+        public IBookRepository BookRepository { get; }
+        public IAuthorRepository AuthorRepository { get; }
+        public ILogRepository LogRepository { get; }
 
         public UnitOfWork(
-            BookDbContext context)
+            BookDbContext context,
+            IBookRepository bookRepository,
+            IAuthorRepository authorRepository,
+            ILogRepository logRepository)
         {
             Context = context;
+            BookRepository = bookRepository;
+            AuthorRepository = authorRepository;
+            LogRepository = logRepository;
         }
 
-        public IBookRepository BookRepository
-        {
-            get
-            {
-                if (_bookRepository == null)
-                    _bookRepository = new BookRepository(Context);
-                return _bookRepository;
-            }
-        }
+        //public IBookRepository BookRepository
+        //{
+        //    get
+        //    {
+        //        if (_bookRepository == null)
+        //            _bookRepository = new BookRepository(Context);
+        //        return _bookRepository;
+        //    }
+        //}
 
-        public IAuthorRepository AuthorRepository
-        {
-            get
-            {
-                if (_authorRepository == null)
-                    _authorRepository = new AuthorRepository(Context);
-                return _authorRepository;
-            }
-        }
+        //public IAuthorRepository AuthorRepository
+        //{
+        //    get
+        //    {
+        //        if (_authorRepository == null)
+        //            _authorRepository = new AuthorRepository(Context);
+        //        return _authorRepository;
+        //    }
+        //}
 
-        public ILogRepository LogRepository
-        {
-            get
-            {
-                if (_logRepository == null)
-                    _logRepository = new LogRepository(Context);
-                return _logRepository;
-            }
-        }
+        //public ILogRepository LogRepository
+        //{
+        //    get
+        //    {
+        //        if (_logRepository == null)
+        //            _logRepository = new LogRepository(Context);
+        //        return _logRepository;
+        //    }
+        //}
 
         public void Dispose()
         {

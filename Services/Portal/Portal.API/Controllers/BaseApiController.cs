@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Portal.API.Models;
 using System;
 using System.Collections.Generic;
@@ -6,6 +7,7 @@ using System.Collections.Generic;
 namespace Portal.API.Controllers
 {
     [ApiController]
+    [Authorize]
     public class BaseApiController : ControllerBase
     {
         [NonAction]
